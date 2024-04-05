@@ -1,5 +1,6 @@
 '''
 This script is used to run the collector. It will collect the data from the API and store it in the database.
+v0.0.1
 '''
 
 import time

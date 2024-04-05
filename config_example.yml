@@ -1,0 +1,4 @@
+dbname: "path_to_your_database/corpus.db"
+corpora:
+  - name: "corpus_name"
+    path: "path_to_your_files"
