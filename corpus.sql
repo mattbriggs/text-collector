@@ -8,8 +8,9 @@ CREATE TABLE document (
     doc_id TEXT PRIMARY KEY,
     corpus_id TEXT,
     doc_path TEXT,
-    doc_text LONGTEXT,
-    doc_raw LONGTEXT,
+    doc_ext TEXT,
+    doc_text TEXT,
+    doc_raw TEXT,
     doc_length INTEGER,
     FOREIGN KEY(corpus_id) REFERENCES corpus(corpus_id)
     );

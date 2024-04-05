@@ -7,7 +7,8 @@ v0.0.1
 import os
 import markdown
 import yaml
-import sqllite3
+import sqlite3
+import uuid
 
 class pageProcessor:
     def __init__(self):
@@ -17,8 +18,11 @@ class pageProcessor:
         '''
         Get the page from the markdown file.
         '''
-        with open(inpath, 'r') as f:
-            page = f.read()
+        try:
+            with open(inpath, 'r') as f:
+                page = f.read()
+        except Exception as e:
+            page = str(e)
         return page
     
     def get_extension(self, inpath):
@@ -28,16 +32,31 @@ class pageProcessor:
         ext_index = inpath.find(".")
         return inpath[ext_index+1:]
     
-    def savepagetotext(self, page, db_path):
+    def create_corpus(self, repository, db_path):
         '''
-        Save the page to the database.
+        Save the corpus to the database.
         '''
+        corpus_id = str(uuid.uuid4())
         sqliteConnection = sqlite3.connect(db_path)
         cursor = sqliteConnection.cursor()
         print("Successfully connected to SQLite")
-        cursor.execute("INSERT INTO pages (page) VALUES (?)", (page,))
+        cursor.execute("INSERT INTO corpus ({}, {}) VALUES (?, ?)".format(corpus_id, repository), (corpus_id, corpus_name))
         sqliteConnection.commit()
         cursor.close()
-    
+        return corpus_id
 
 
+    def savepagetotext(self, doc_path, page, extension, db_path):
+        '''
+        Save the page to the database.
+        '''
+        doc_id = str(uuid.uuid4())
+        doc_length = page.count("\n")
+        sqliteConnection = sqlite3.connect(db_path)
+        cursor = sqliteConnection.cursor()
+        print("Successfully connected to SQLite")
+        cursor.execute('INSERT INTO document (doc_id, corpus_id, doc_path, \
+        doc_ext, doc_text, doc_raw, doc_length) VALUES ( ?, ?, ?, ?, ?, ?, ? )',
+        (doc_id, "corpus", doc_path, extension, page, page, doc_length) )
+        sqliteConnection.commit()
+        cursor.close()
