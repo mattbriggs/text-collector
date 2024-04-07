@@ -56,7 +56,146 @@ class pageProcessor:
         cursor = sqliteConnection.cursor()
         print("Successfully connected to SQLite")
         cursor.execute('INSERT INTO document (doc_id, corpus_id, doc_path, \
-        doc_ext, doc_text, doc_raw, doc_length) VALUES ( ?, ?, ?, ?, ?, ?, ? )',
-        (doc_id, "corpus", doc_path, extension, page, page, doc_length) )
+        doc_ext, doc_raw, doc_length) VALUES (?, ?, ?, ?, ?, ? )',
+        (doc_id, "corpus", doc_path, extension, page, doc_length) )
         sqliteConnection.commit()
         cursor.close()
+
+        if extension == "md":
+            metadata = page.split("---")[1]
+            raw_page = page.split("---")[2]
+            yml_metadata = yaml.load(metadata, Loader=yaml.FullLoader)
+
+            sqliteConnection = sqlite3.connect(db_path)
+            cursor = sqliteConnection.cursor()
+            print("Successfully connected to SQLite")
+            cursor.execute('INSERT INTO body (doc_id, body_text) VALUES ( ?, ? )',
+            (doc_id, raw_page) )
+            sqliteConnection.commit()
+            cursor.close()
+
+            try:
+                title = yml_metadata["title"]
+            except KeyError:
+                title = ""
+            try:
+                meta_description = yml_metadata["description"]
+            except KeyError:
+                meta_description = ""
+            try:
+                author = yml_metadata["author"]
+            except KeyError:
+                author = ""
+            try:
+                ms_author = yml_metadata["ms.author"]
+            except KeyError:
+                ms_author = ""
+            try:
+                ms_service = yml_metadata["ms.service"]
+            except KeyError:
+                ms_service = ""
+            try:
+                ms_topic = yml_metadata["ms.topic"]
+            except KeyError:
+                ms_topic = ""
+            try:
+                ms_date = yml_metadata["ms.date"]
+            except KeyError:
+                ms_date = ""
+
+            sqliteConnection = sqlite3.connect(db_path)
+            cursor = sqliteConnection.cursor()
+            print("Successfully connected to SQLite")
+            cursor.execute('INSERT INTO metadata (doc_id, metadata_raw, title, meta_description, author, ms_author, ms_service, ms_topic, ms_date ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )',
+            (doc_id, metadata, title, meta_description, author, ms_author, ms_service, ms_topic, ms_date) )
+            sqliteConnection.commit()
+            cursor.close()
+
+        elif extension == "yaml":
+            raw_yaml = yaml.load(page, Loader=yaml.FullLoader)
+            try:
+                yml_metadata = raw_yaml["metadata"]
+            except KeyError:
+                metadata = ""
+
+            sqliteConnection = sqlite3.connect(db_path)
+            cursor = sqliteConnection.cursor()
+            print("Successfully connected to SQLite")
+            cursor.execute('INSERT INTO body (doc_id, body_text) VALUES ( ?, ? )',
+            (doc_id, str(raw_yaml)) )
+            sqliteConnection.commit()
+            cursor.close()
+
+            try:
+                title = yml_metadata["title"]
+            except KeyError:
+                title = ""
+            try:
+                meta_description = yml_metadata["description"]
+            except KeyError:
+                meta_description = ""
+            try:
+                author = yml_metadata["author"]
+            except KeyError:
+                author = ""
+            try:
+                ms_author = yml_metadata["ms.author"]
+            except KeyError:
+                ms_author = ""
+            try:
+                ms_service = yml_metadata["ms.service"]
+            except KeyError:
+                ms_service = ""
+            try:
+                ms_topic = yml_metadata["ms.topic"]
+            except KeyError:
+                ms_topic = ""
+            try:
+                ms_date = yml_metadata["ms.date"]
+            except KeyError:
+                ms_date = ""
+            
+            sqliteConnection = sqlite3.connect(db_path)
+            cursor = sqliteConnection.cursor()
+            print("Successfully connected to SQLite")
+            cursor.execute('INSERT INTO metadata (doc_id, metadata_raw, title, meta_description, author, ms_author, ms_service, ms_topic, ms_date ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )',
+            (doc_id, metadata, title, meta_description, author, ms_author, ms_service, ms_topic, ms_date) )
+            sqliteConnection.commit()
+            cursor.close()
+
+            try:
+                title = yml_metadata["title"]
+            except KeyError:
+                title = ""
+            try:
+                meta_description = yml_metadata["meta_description"]
+            except KeyError:
+                meta_description = ""
+            try:
+                author = yml_metadata["author"]
+            except KeyError:
+                author = ""
+            try:
+                ms_author = yml_metadata["ms_author"]
+            except KeyError:
+                ms_author = ""
+            try:
+                ms_service = yml_metadata["ms_service"]
+            except KeyError:
+                ms_service = ""
+            try:
+                ms_topic = yml_metadata["ms_topic"]
+            except KeyError:
+                ms_topic = ""
+            try:
+                ms_date = yml_metadata["ms_date"]
+            except KeyError:
+                ms_date = ""
+
+            sqliteConnection = sqlite3.connect(db_path)
+            cursor = sqliteConnection.cursor()
+            print("Successfully connected to SQLite")
+            cursor.execute('INSERT INTO metadata (doc_id, metadata_raw, title, meta_description, author, ms_author, ms_service, ms_topic, ms_date ) VALUES ( ?, ?, ?, ?, ?, ?, ? )',
+            (doc_id, metadata, title, meta_description, author, ms_author, ms_service, ms_service, ms_service, ms_topic, ms_date) )
+            sqliteConnection.commit()
+            cursor.close()
