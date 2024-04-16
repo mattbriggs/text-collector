@@ -60,3 +60,9 @@ The `PageProcessor` class is responsible for processing individual files. It rea
 ### Collector
 
 The `Collector` module orchestrates the data collection process. It retrieves configuration settings, initializes the database, collects file paths for processing, and manages the multithreaded processing of files.
+
+## Text Miner
+
+You can use [Text Miner](https://github.com/mattbriggs/text-miner) to create text analysis workloads using Text Collector.
+
+Text Miner is a Python application designed to process a text corpus stored in a SQLite database. The application extracts data from a database that contains corpus, generates summaries, and identifies the top fifty terms within the documents. The tool is useful for quick content analysis and data extraction from large text collections.
