@@ -13,6 +13,13 @@ CREATE TABLE document (
     doc_length INTEGER,
     FOREIGN KEY(corpus_id) REFERENCES corpus(corpus_id)
     );
+CREATE TABLE lines (
+    doc_id TEXT,
+    line_id INTEGER,
+    line_text TEXT,
+    PRIMARY KEY(doc_id, line_id),
+    FOREIGN KEY(doc_id) REFERENCES document(doc_id)
+    );
 CREATE TABLE body (
     doc_id TEXT PRIMARY KEY,
     body_text TEXT,

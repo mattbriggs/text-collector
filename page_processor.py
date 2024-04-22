@@ -45,7 +45,6 @@ class pageProcessor:
         cursor.close()
         return corpus_id
 
-
     def savepagetotext(self, doc_path, page, extension, db_path):
         '''
         Save the page to the database.
@@ -73,6 +72,16 @@ class pageProcessor:
             (doc_id, raw_page) )
             sqliteConnection.commit()
             cursor.close()
+
+            lines = raw_page.split("\n")
+            for inx, i in enumerate(lines):
+                sqliteConnection = sqlite3.connect(db_path)
+                cursor = sqliteConnection.cursor()
+                print("Successfully connected to SQLite")
+                cursor.execute('INSERT INTO lines (doc_id, line_id, line_text) VALUES ( ?, ?, ?)',
+                (doc_id, inx, i) )
+                sqliteConnection.commit()
+                cursor.close()
 
             try:
                 title = yml_metadata["title"]
@@ -121,10 +130,20 @@ class pageProcessor:
             sqliteConnection = sqlite3.connect(db_path)
             cursor = sqliteConnection.cursor()
             print("Successfully connected to SQLite")
-            cursor.execute('INSERT INTO body (doc_id, body_text) VALUES ( ?, ? )',
+            cursor.execute('INSERT INTO body (doc_id, body_text) VALUES ( ?, ?)',
             (doc_id, str(raw_yaml)) )
             sqliteConnection.commit()
             cursor.close()
+
+            lines = str(raw_yaml).split("\n")
+            for inx, i in enumerate(lines):
+                sqliteConnection = sqlite3.connect(db_path)
+                cursor = sqliteConnection.cursor()
+                print("Successfully connected to SQLite")
+                cursor.execute('INSERT INTO lines (doc_id, line_id, line_text) VALUES ( ?, ?, ?)',
+                (doc_id, inx, i) )
+                sqliteConnection.commit()
+                cursor.close()
 
             try:
                 title = yml_metadata["title"]
