@@ -10,6 +10,8 @@ import yaml
 import sqlite3
 import uuid
 
+import sentiment as SNT
+
 class pageProcessor:
     def __init__(self):
         pass
@@ -75,11 +77,13 @@ class pageProcessor:
 
             lines = raw_page.split("\n")
             for inx, i in enumerate(lines):
+
+                snet = SNT.get_sentiment(i)
+
                 sqliteConnection = sqlite3.connect(db_path)
                 cursor = sqliteConnection.cursor()
                 print("Successfully connected to SQLite")
-                cursor.execute('INSERT INTO lines (doc_id, line_id, line_text) VALUES ( ?, ?, ?)',
-                (doc_id, inx, i) )
+                cursor.execute('INSERT INTO lines (doc_id, line_no, line_text, possent, nuesent, negsent, compsent) VALUES ( ?, ?, ?, ?, ?, ?, ? )', (doc_id, inx, i, snet['pos'], snet['neu'], snet['neg'], snet['compound']))
                 sqliteConnection.commit()
                 cursor.close()
 
@@ -137,11 +141,13 @@ class pageProcessor:
 
             lines = str(raw_yaml).split("\n")
             for inx, i in enumerate(lines):
+                
+                snet = SNT.get_sentiment(i)
+
                 sqliteConnection = sqlite3.connect(db_path)
                 cursor = sqliteConnection.cursor()
                 print("Successfully connected to SQLite")
-                cursor.execute('INSERT INTO lines (doc_id, line_id, line_text) VALUES ( ?, ?, ?)',
-                (doc_id, inx, i) )
+                cursor.execute('INSERT INTO lines (doc_id, line_no, line_text, possent, nuesent, negsent, compsent) VALUES ( ?, ?, ?, ?, ?, ?, ? )', (doc_id, inx, i, snet['pos'], snet['neu'], snet['neg'], snet['compound']))
                 sqliteConnection.commit()
                 cursor.close()
 

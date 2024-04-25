@@ -4,6 +4,7 @@ CREATE TABLE corpus (
     no_words INTEGER,
     doc_count INTEGER
     );
+
 CREATE TABLE document (
     doc_id TEXT PRIMARY KEY,
     corpus_id TEXT,
@@ -13,18 +14,25 @@ CREATE TABLE document (
     doc_length INTEGER,
     FOREIGN KEY(corpus_id) REFERENCES corpus(corpus_id)
     );
+
 CREATE TABLE lines (
     doc_id TEXT,
-    line_id INTEGER,
+    line_no INTEGER,
     line_text TEXT,
-    PRIMARY KEY(doc_id, line_id),
+    possent REAL,
+    nuesent REAL,
+    negsent REAL,
+    compsent REAL,
+    PRIMARY KEY(doc_id, line_no),
     FOREIGN KEY(doc_id) REFERENCES document(doc_id)
     );
+
 CREATE TABLE body (
     doc_id TEXT PRIMARY KEY,
     body_text TEXT,
     FOREIGN KEY(doc_id) REFERENCES document(doc_id)
     );
+
 CREATE TABLE metadata (
     doc_id TEXT PRIMARY KEY,
     metadata_raw TEXT,

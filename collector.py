@@ -55,6 +55,7 @@ class Collector:
                     outlist.append(entry)
         return outlist
 
+
     def process_file(self, f, db_path, numberof):
         print(f"Processing page {f[0]+1} of {numberof}")
         pp = PP.pageProcessor()
@@ -72,3 +73,5 @@ class Collector:
         # Use ThreadPoolExecutor to create and manage a pool of threads
         with ThreadPoolExecutor(max_workers=4) as executor:
             executor.map(self.process_file, files_with_index, [db_path]*numberof, [numberof]*numberof)
+
+    
